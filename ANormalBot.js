@@ -17,17 +17,7 @@ const config = require("./config.json");
 
 const guildid = require("./guildid.json")
 
-const http = require('http');
-const express = require('express');
-const app = express();
-app.get("/", (request, response) => {
-  console.log(Date.now() + " Ping Received");
-  response.sendStatus(200);
-});
-app.listen(process.env.PORT);
-setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000);
+
 
 //turns bot on
 
@@ -186,109 +176,109 @@ client.on('message', msg => {
       if (args[0] === '.-') {
         msg.channel.send('a')
         }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-...') {
+      if (args[0] === '-...') {
           msg.channel.send('b')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-.-.') {
+      if (args[0] === '-.-.') {
           msg.channel.send('c')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-..') {
+      if (args[0] === '-..') {
           msg.channel.send('d')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.') {
+      if (args[0] === '.') {
           msg.channel.send('e')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '..-.') {
+      if (args[0] === '..-.') {
           msg.channel.send('f')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--.') {
+      if (args[0] === '--.') {
           msg.channel.send('g')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '....') {
+      if (args[0] === '....') {
           msg.channel.send('h')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '..') {
+      if (args[0] === '..') {
           msg.channel.send('i')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.---') {
+      if (args[0] === '.---') {
           msg.channel.send('j')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-.-') {
+      if (args[0] === '-.-') {
           msg.channel.send('k')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.-..') {
+      if (args[0] === '.-..') {
           msg.channel.send('l')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--') {
+      if (args[0] === '--') {
           msg.channel.send('m')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-.') {
+      if (args[0] === '-.') {
           msg.channel.send('n')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--.-') {
+      if (args[0] === '--.-') {
           msg.channel.send('o')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.--.') {
+      if (args[0] === '.--.') {
           msg.channel.send('p')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--.-') {
+      if (args[0] === '--.-') {
           msg.channel.send('q')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.-.') {
+      if (args[0] === '.-.') {
           msg.channel.send('r')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '...') {
+      if (args[0] === '...') {
           msg.channel.send('s')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-') {
+      if (args[0] === '-') {
           msg.channel.send('t')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '..-') {
+      if (args[0] === '..-') {
           msg.channel.send('u')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '...-') {
+      if (args[0] === '...-') {
           msg.channel.send('v')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.--') {
+      if (args[0] === '.--') {
           msg.channel.send('w')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-..-') {
+      if (args[0] === '-..-') {
           msg.channel.send('x')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-.--') {
+      if (args[0] === '-.--') {
           msg.channel.send('y')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--..') {
+      if (args[0] === '--..') {
           msg.channel.send('z')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.----') {
+      if (args[0] === '.----') {
           msg.channel.send('1')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '..---') {
+      if (args[0] === '..---') {
           msg.channel.send('2')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '...--') {
+      if (args[0] === '...--') {
           msg.channel.send('3')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '....-') {
+      if (args[0] === '....-') {
           msg.channel.send('4')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '.....') {
+      if (args[0] === '.....') {
           msg.channel.send('5')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-....') {
+      if (args[0] === '-....') {
           msg.channel.send('6')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '--...') {
+      if (args[0] === '--...') {
           msg.channel.send('7')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '---..') {
+      if (args[0] === '---..') {
           msg.channel.send('8')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '----.') {
+      if (args[0] === '----.') {
           msg.channel.send('9')
           }
-      if (args[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] === '-----') {
+      if (args[0] === '-----') {
           msg.channel.send('10')
           }
         }
@@ -421,13 +411,6 @@ client.on("message", function(msg) {
 });
 
 const jokes = require('./jokes.json');
-
-client.on("message", function(msg) {
-  if (msg.author.bot) return;
-    if (msg.content.startsWith(prefix + 'joke')) {
-      msg.channel.send(jokes[Math.floor(Math.random() * jokes.length)]);
-      }
-});
 
 
 client.on('message', msg => {
