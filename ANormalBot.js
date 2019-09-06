@@ -533,7 +533,7 @@ async function execute(msg, serverQueue) {
 	const args = msg.content.split(' ');
 
 	const voiceChannel = msg.member.voiceChannel;
-	if (!voiceChannel) return msg.channel.send('you need to be in a voice channel');
+	if (!voiceChannel) return msg.channel.send('you might not be in a voice channel');
 	const permissions = voiceChannel.permissionsFor(msg.client.user);
 	if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
 		return msg.channel.send('i might need permissions to join the channel and speak');
@@ -608,6 +608,5 @@ function play(guild, song) {
 		});
 	dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
-
 
 client.login(process.env.lmao)
