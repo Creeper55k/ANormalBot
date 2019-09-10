@@ -12,7 +12,6 @@
     "pm2": "3.4.0",
     "snekfetch": "^4.0.4",
     "youtube-api-v3-search": "1.2.1",
-    "ytdl-core-discord": "1.0.3",
     "ytp": "0.0.1",
     "ytsearcher": "1.2.2",
     "discordbots-api": "^0.0.2",
