@@ -169,6 +169,37 @@ client.on("message", msg => {
   }
 });
 
+client.on('message', msg => {
+  if (msg.content.startsWith(prefix + 'binary')) {
+    const args = msg.content.split(/ +/).slice(1);
+    if (msg.author.bot) return;
+    //let i = ["i"]
+       let letters = " ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
+				binary = "/,01000001,01000010,01000011,01000100,01000101,01000110,01000111,01001000,01001001,01001010,01001011,01001100,01001101,01001110,01001111,01010000,01010001,01010010,01010011,01010100,01010111,01011000,01011001,01011010".split(","),
+				text = args.join(" ").toUpperCase();
+			while (text.includes("Ä") || text.includes("Ö") || text.includes("Ü")) {
+				text = text.replace("Ä","AE").replace("Ö","OE").replace("Ü","UE");
+			}
+			if (text.startsWith("0") || text.startsWith("1")) {
+				text = text.split(" ");
+				let length = text.length;
+				for (var i = 0; i < length; i++) {
+					text[i] = letters[binary.indexOf(text[i])];
+				}
+				text = text.join("");
+			} else {
+				text = text.split("");
+				let length = text.length;
+				for (var i = 0; i < length; i++) {
+					text [i] = binary[letters.indexOf(text[i])];
+				}
+				text = text.join(" ");
+			}
+			return msg.channel.send(text);
+	  
+	    }
+});
+
 
 client.on("message", msg => {
   if(msg.content.includes("discord.gg/")) {
