@@ -486,7 +486,7 @@ async function execute(msg, serverQueue) {
 	} else {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
-		return msg.channel.send(`${song.title}` + "has been added to queue");
+		return msg.channel.send(`${song.title}` + " has been added to queue");
 	}
 
 }
