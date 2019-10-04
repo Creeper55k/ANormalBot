@@ -36,10 +36,17 @@ dbl.on('posted', () => {
   console.log('oliy is fat!');
 })
 
+
+
 dbl.on('error', e => {
  console.log(`Oops! ${e}`);
 })
 
+dbl.on('ready', () => {
+    setInterval(() => {
+        dbl.postStats(client.guilds.size, client.shards.Id, client.shards.total);
+    }, 1800000);
+});
 const activities_list = [
     "with the )help command.",
     "lmao",
@@ -76,7 +83,10 @@ if (msg.content === ')help') {
     .addField(")setlanguage", "currently supports turkish, more languages to be added")
     .addField(")8ball (question)", "ask any question, and it will give you its best answer")
     .addField(")joke", "gives a random joke, jokes will be added everyday")
-    .addField("updates (not a command, just shows what i did to the bot)", "Fixed )cat command and added it back")
+    .addField(")morsecode", "converts letters to morsecode or the other way around, morse code alphabet can be found here: https://morsecode.scphillips.com/morse2.html")
+    .addField(")play", "plays youtube songs when you give it a link")
+    .addField(")binary", "converts binary and alphabet, for the alphabet for binary: https://www.convertbinary.com/alphabet/")
+    .addField("updates (not a command, just shows what i did to the bot)", "binary command added")
 		msg.channel.send({embed})
 	}
 });
@@ -169,37 +179,37 @@ client.on("message", msg => {
   }
 });
 
+
+
 client.on('message', msg => {
-  if (msg.content.startsWith(prefix + 'binary')) {
+  if (msg.content.startsWith(prefix + 'morsecode')) {
     const args = msg.content.split(/ +/).slice(1);
     if (msg.author.bot) return;
     //let i = ["i"]
-       let letters = " ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
-				binary = "/,01000001,01000010,01000011,01000100,01000101,01000110,01000111,01001000,01001001,01001010,01001011,01001100,01001101,01001110,01001111,01010000,01010001,01010010,01010011,01010100,01010111,01011000,01011001,01011010".split(","),
+       let alpha = " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(""),
+				morse = "/,.-,-...,-.-.,-..,.,..-.,--.,....,..,.---,-.-,.-..,--,-.,---,.--.,--.-,.-.,...,-,..-,...-,.--,-..-,-.--,--..,.----,..---,...--,....-,.....,-....,--...,---..,----.,-----".split(","),
 				text = args.join(" ").toUpperCase();
 			while (text.includes("Ä") || text.includes("Ö") || text.includes("Ü")) {
 				text = text.replace("Ä","AE").replace("Ö","OE").replace("Ü","UE");
 			}
-			if (text.startsWith("0") || text.startsWith("1")) {
+			if (text.startsWith(".") || text.startsWith("-")) {
 				text = text.split(" ");
 				let length = text.length;
 				for (var i = 0; i < length; i++) {
-					text[i] = letters[binary.indexOf(text[i])];
+					text[i] = alpha[morse.indexOf(text[i])];
 				}
 				text = text.join("");
 			} else {
 				text = text.split("");
 				let length = text.length;
 				for (var i = 0; i < length; i++) {
-					text [i] = binary[letters.indexOf(text[i])];
+					text [i] = morse[alpha.indexOf(text[i])];
 				}
 				text = text.join(" ");
 			}
 			return msg.channel.send(text);
-	  
-	    }
+  }
 });
-
 
 client.on("message", msg => {
   if(msg.content.includes("discord.gg/")) {
@@ -212,14 +222,61 @@ client.on("message", msg => {
 });
 
 client.on('message', msg => {
-    if (msg.content === ')avatar') {
+  if (msg.content.startsWith(prefix + 'binary')) {
+    const args = msg.content.split(/ +/).slice(1);
+    if (msg.author.bot) return;
+    //let i = ["i"]
+       let alpha = " ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
+				binary = "/,01000001,01000010,01000011,01000100,01000101,01000110,01000111,01001000,01001001,01001010,01001011,01001100,01001101,01001110,01001111,01010000,01010001,01010010,01010011,01010100,01010111,01011000,01011001,01011010".split(","),
+				text = args.join(" ").toUpperCase();
+			while (text.includes("Ä") || text.includes("Ö") || text.includes("Ü")) {
+				text = text.replace("Ä","AE").replace("Ö","OE").replace("Ü","UE");
+			}
+			if (text.startsWith("0") || text.startsWith("1")) {
+				text = text.split(" ");
+				let length = text.length;
+				for (var i = 0; i < length; i++) {
+					text[i] = alpha[binary.indexOf(text[i])];
+				}
+				text = text.join("");
+			} else {
+				text = text.split("");
+				let length = text.length;
+				for (var i = 0; i < length; i++) {
+					text [i] = binary[alpha.indexOf(text[i])];
+				}
+				text = text.join(" ");
+			}
+			return msg.channel.send(text);
+  }
+});
+
+client.on('message', msg => {
+    if (msg.content.startsWith(prefix + 'avatar')) {
        if (msg.author.bot) return;
+      const args = msg.content.split(" ").slice(1);
       // Remove the "var" line; it isn't necessary.
+      function getUserFromMention(mention) {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
+
+		if (mention.startsWith('!')) {
+			mention = mention.slice(1);
+		}
+
+		return client.users.get(mention);
+	}
+}
+      if (args[0]) {
+		const user = getUserFromMention(args[0]); 
       let embed = new Discord.RichEmbed()
       // Replace "message.member" with "message.author"
-    .setImage(msg.author.avatarURL)
+    .setImage(user.avatarURL)
     .setColor('#275BF0')
       msg.channel.send(embed)
+      }
     }
 });
 
@@ -233,6 +290,8 @@ client.on('message', msg => {
      msg.channel.send(embed)
    }
 });
+
+
 
 
 client.on('message', msg => {
@@ -327,6 +386,13 @@ client.on("message", function(msg) {
 
 const jokes = require('./jokes.json');
 
+client.on("message", function(msg) {
+  if (msg.author.bot) return;
+    if (msg.content.startsWith(prefix + 'joke')) {
+      msg.channel.send(jokes[Math.floor(Math.random() * jokes.length)]);
+      }
+});
+
 
 client.on('message', msg => {
   if (msg.content.startsWith(prefix + 'setlanguage')) {
@@ -408,21 +474,24 @@ client.on('disconnected', function(event) {
   }
 });
 
-client.on('message', msg => {
-	// Embedded
+
+client.on('message', (msg) => {
+if (msg.content === ')botinfo') {
   if (msg.author.bot) return;
-	if(msg.content.startsWith(prefix + 'cat')) {
-		try {
-			get('https://aws.random.cat/meow').then(res => {
-				const embed = new Discord.RichEmbed()
-				.setImage(res.body.file)
-				return msg.channel.send({embed});
-			});
-		} catch(err) {
-			return msg.channel.send(error.stack);
-		}
+  let color = ((1 << 24) * Math.random() | 0).toString(16);
+  const embed = new Discord.RichEmbed()
+		.setColor(`#${color}`)
+		.setTitle("My Info")
+		.addField("My name", client.user.tag)
+		.addField("My id", client.user.id)
+    .addField("What version am i on?", Discord.version)
+    .addField("the amount of servers i am in", client.guilds.size)
+    .addField("Memory Usage", Math.round(process.memoryUsage().heapUsed / 1024 / 1024))
+		msg.channel.send({embed})
 	}
 });
+
+
 
 const queue = new Map();
 
@@ -523,5 +592,8 @@ function play(guild, song) {
 		});
 	dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
+
+
+
 
 client.login(process.env.lmao)
