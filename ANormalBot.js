@@ -23,7 +23,7 @@ const parseTime   = require('m3u8stream/dist/parse-time');
 
 
 //turns bot on
-
+//updates
 
 
 client.on('ready', () => {
