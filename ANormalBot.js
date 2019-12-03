@@ -17,6 +17,9 @@ const config = require("./config.json");
 
 const guildid = require("./guildid.json")
 
+const m3u8stream = require('m3u8stream');
+
+const parseTime   = require('m3u8stream/dist/parse-time');
 
 
 //turns bot on
