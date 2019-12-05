@@ -495,7 +495,7 @@ if (msg.content === ')botinfo') {
 });
 
 
-
+/*
 const queue = new Map();
 
 client.on('message', async msg => {
@@ -595,7 +595,7 @@ function play(guild, song) {
 		});
 	dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
-
+*/
 
 
 
