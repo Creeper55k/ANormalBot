@@ -84,16 +84,7 @@ client.on('ready', () => {
     }, 12000); // Runs this every 10 seconds.
 });
 
-client.on('guildCreate', (guild) => { // If the Bot was added on a server, proceed
-    if (!guildConf[guild.id]) { // If the guild's id is not on the GUILDCONF File, proceed
-	guildConf[guild.id] = {
-		prefix: config.prefix
-	}
-    }
-     fs.writeFile('./guildConf.json', JSON.stringify(guildConf, null, 2), (err) => {
-     	if (err) console.log(err)
-	})
-});
+
 
 
 
