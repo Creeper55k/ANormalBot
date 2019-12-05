@@ -1,13 +1,16 @@
-//grabs required package from package.json
+
 const Discord = require('discord.js');
 //creates client
+
+
 const client = new Discord.Client({autoReconnect:true});
 
-const { get } = require('snekfetch');
+
+
+
 
 
 const ytdl = require('ytdl-core');
-
 //turns client on and logs into bot
 const fs = require('fs');
 const { inspect } = require('util');
@@ -17,13 +20,29 @@ const config = require("./config.json");
 
 const guildid = require("./guildid.json")
 
+
+const guildConf = require('./guildConf.json');
+
 const m3u8stream = require('m3u8stream');
 
 const parseTime   = require('m3u8stream/dist/parse-time');
 
 
+
+const http = require('http');
+const express = require('express');
+const app = express();
+app.get("/", (request, response) => {
+  console.log(Date.now() + " Ping Received");
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 280000);
+
+
 //turns bot on
-//updates
 
 
 client.on('ready', () => {
@@ -31,8 +50,9 @@ client.on('ready', () => {
 });
 
 
+
 const DBL = require("dblapi.js");
-const dbl = new DBL('', client);
+const dbl = new DBL('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzMDg2OTE3NDYyNTYzMjI1NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNTcxMTgwNzU0fQ.0IMgEATrthROT8NFVdE6c8ROfZHGFE_MjUPnihTolMg', client);
 
 // Optional events
 dbl.on('posted', () => {
@@ -64,31 +84,42 @@ client.on('ready', () => {
     }, 12000); // Runs this every 10 seconds.
 });
 
+client.on('guildCreate', (guild) => { // If the Bot was added on a server, proceed
+    if (!guildConf[guild.id]) { // If the guild's id is not on the GUILDCONF File, proceed
+	guildConf[guild.id] = {
+		prefix: config.prefix
+	}
+    }
+     fs.writeFile('./guildConf.json', JSON.stringify(guildConf, null, 2), (err) => {
+     	if (err) console.log(err)
+	})
+});
 
- 
+
+
 
 client.on('message', (msg) => {
-if (msg.content === ')help') {
+if (msg.content === 'derghelp') {
   if (msg.author.bot) return;
   const embed = new Discord.RichEmbed()
 		.setColor(0x954D23)
 		.setTitle("Commands:")
-		.addField(")help", "shows commands")
-		.addField(")ping", "bot will send ping by amount of milliseconds it takes to send a message")
-    .addField(")invite", "gives you the invite for me to join your server")
-    .addField(")rps", "rock paper scissors are to be put after command,")
-    .addField(")avatar", "brings up avatar of requested user")
-    .addField(")randomcolor", "sends random color from hex database")
-    .addField(")heads or tails", "basically coinflip")
+		.addField("derghelp", "shows commands")
+		.addField("dergping", "bot will send ping by amount of milliseconds it takes to send a message")
+    .addField("derginvite", "gives you the invite for me to join your server")
+    .addField("dergrps", "rock paper scissors are to be put after command,")
+    .addField("dergavatar", "brings up avatar of requested user")
+    .addField("dergrandomcolor", "sends random color from hex database")
+    .addField("dergheads or tails", "basically coinflip")
     .addField("@ANormalBot", "bot replies to its mention")
-    .addField(")cat", "gives a random image of a cat" )
-    .addField(")eval", "gives owner permission to run scripts outside the program (Bot Owner Only)")
-    .addField(")setlanguage", "currently supports turkish, more languages to be added")
-    .addField(")8ball (question)", "ask any question, and it will give you its best answer")
-    .addField(")joke", "gives a random joke, jokes will be added everyday")
-    .addField(")morsecode", "converts letters to morsecode or the other way around, morse code alphabet can be found here: https://morsecode.scphillips.com/morse2.html")
-    .addField(")play", "plays youtube songs when you give it a link")
-    .addField(")binary", "converts binary and alphabet, for the alphabet for binary: https://www.convertbinary.com/alphabet/")
+    .addField("dergcat", "gives a random image of a cat" )
+    .addField("dergeval", "gives owner permission to run scripts outside the program (Bot Owner Only)")
+    .addField("dergsetlanguage", "currently supports turkish, more languages to be added")
+    .addField("derg8ball (question)", "ask any question, and it will give you its best answer")
+    .addField("dergjoke", "gives a random joke, jokes will be added everyday")
+    .addField("dergmorsecode", "converts letters to morsecode or the other way around, morse code alphabet can be found here: https://morsecode.scphillips.com/morse2.html")
+    .addField("dergplay", "plays youtube songs when you give it a link")
+    .addField("dergbinary", "converts binary and alphabet, for the alphabet for binary: https://www.convertbinary.com/alphabet/")
     .addField("updates (not a command, just shows what i did to the bot)", "binary command added")
 		msg.channel.send({embed})
 	}
@@ -114,7 +145,7 @@ client.on('message', (msg) => {
 
 
 client.on('message', (msg) => {
-if (msg.content === ')invite') {
+if (msg.content === 'derginvite') {
   if (msg.author.bot) return;
   const embed = new Discord.RichEmbed()
   msg.channel.send({embed: {
@@ -127,8 +158,9 @@ if (msg.content === ')invite') {
 });
 
 
+process.on('unhandledRejection', console.error);
 
-var prefix = ")"
+var prefix = "derg"
 
 
 
@@ -141,7 +173,7 @@ const clean = text => {
 
 client.on('message', (msg) => {
   if (msg.author.bot) return;
-  if (msg.content.startsWith(prefix + 'ping')) {
+  if (msg.content.startsWith(config.prefix + 'ping')) {
     const embed = new Discord.RichEmbed()
     .setColor(0x954D23)
     .addField("your ping:", `${Date.now() - msg.createdTimestamp}`)
@@ -155,7 +187,7 @@ client.on('message', (msg) => {
 
 client.on("message", msg => {
   const args = msg.content.split(" ").slice(1);
-  if (msg.content.startsWith(prefix + 'eval')) {
+  if (msg.content.startsWith(config.prefix + 'eval')) {
     if(msg.author.id !== config.ID) return msg.channel.send('my developer can only do this')
 //if author id doesn't match the developer's id, don't do anything but say message above
      if (msg.author.bot) return;
@@ -185,7 +217,7 @@ client.on("message", msg => {
 
 
 client.on('message', msg => {
-  if (msg.content.startsWith(prefix + 'morsecode')) {
+  if (msg.content.startsWith(config.prefix + 'morsecode')) {
     const args = msg.content.split(/ +/).slice(1);
     if (msg.author.bot) return;
     //let i = ["i"]
@@ -214,18 +246,10 @@ client.on('message', msg => {
   }
 });
 
-client.on("message", msg => {
-  if(msg.content.includes("discord.gg/")) {
-    msg.delete();
-    if(msg.guild.id == guildid.guildID) return; 
-    if (msg.author.bot) return;
-    msg.channel.send("invites arent allowed")
-    msg.channel.send('<@241066577921835008>, invite sent, ban the user')
-  }
-});
+
 
 client.on('message', msg => {
-  if (msg.content.startsWith(prefix + 'binary')) {
+  if (msg.content.startsWith(config.prefix + 'binary')) {
     const args = msg.content.split(/ +/).slice(1);
     if (msg.author.bot) return;
     //let i = ["i"]
@@ -255,7 +279,7 @@ client.on('message', msg => {
 });
 
 client.on('message', msg => {
-    if (msg.content.startsWith(prefix + 'avatar')) {
+    if (msg.content.startsWith(config.prefix + 'avatar')) {
        if (msg.author.bot) return;
       const args = msg.content.split(" ").slice(1);
       // Remove the "var" line; it isn't necessary.
@@ -284,7 +308,7 @@ client.on('message', msg => {
 });
 
 client.on('message', msg => {
-  if (msg.content === ')randomcolor') {
+  if (msg.content === 'dergrandomcolor') {
      if (msg.author.bot) return;
       let color = ((1 << 24) * Math.random() | 0).toString(16); //Generates random hex value.
       let embed = new Discord.RichEmbed() //Embeds.
@@ -299,7 +323,7 @@ client.on('message', msg => {
 
 client.on('message', msg => {
   const args = msg.content.split(" ").slice(1);
-   if (msg.content.startsWith(prefix + 'say')) {
+   if (msg.content.startsWith(config.prefix + 'say')) {
      if (msg.author.bot) return;
      if(msg.author.id !== config.ID) return msg.channel.send('You dont have permission to run this command, my developers can only can do this')
    const sayMessage = args.join(" ");
@@ -316,7 +340,7 @@ client.on('message', msg => {
     if (msg.author.bot) return;
     if(!args.length) {
       msg.react('559091884417482772')
-      msg.channel.send('my prefix is ), to get my commands to show, do )help')
+      msg.channel.send('my prefix is derg, to get my commands to show, do derghelp')
     }
     if (args[0] === 'bad bot') {
       msg.author.send('no u')
@@ -326,7 +350,7 @@ client.on('message', msg => {
 
 
 client.on('message', function(msg) {
-  if (msg.content === ')heads or tails') {
+  if (msg.content === 'dergheads or tails') {
     if (msg.author.bot) return;
     var array = ["heads", "tails"]
     msg.channel.send(array[Math.floor(Math.random() * array.length)])
@@ -336,7 +360,7 @@ client.on('message', function(msg) {
 
 
 client.on("message", function(msg) {
-    if (msg.content === ")roll the dice") {
+    if (msg.content === "dergroll the dice") {
        if (msg.author.bot) return;
         var roll = (Math.floor(Math.random()*200)+1);
         if (roll <= 100) {
@@ -352,7 +376,7 @@ client.on("message", function(msg) {
 
 
 client.on("message", function(msg) {
-    if (msg.content.startsWith(prefix + 'rps')) {
+    if (msg.content.startsWith(config.prefix + 'rps')) {
       const args = msg.content.split(" ").slice(1);
        if (msg.author.bot) return;
         var array = ["scissors", "paper", "rock"]
@@ -376,7 +400,7 @@ client.on("message", function(msg) {
 });
 
 client.on("message", function(msg) {
-    if (msg.content.startsWith(prefix + '8ball')) {
+    if (msg.content.startsWith(config.prefix + '8ball')) {
       const args = msg.content.split(" ").slice(1);
        if (msg.author.bot) return;
         var array = ["yes", "no", "maybe", "ask again later", "i dont know", "most likely"]
@@ -391,7 +415,7 @@ const jokes = require('./jokes.json');
 
 client.on("message", function(msg) {
   if (msg.author.bot) return;
-    if (msg.content.startsWith(prefix + 'joke')) {
+    if (msg.content.startsWith(config.prefix + 'joke')) {
       msg.channel.send(jokes[Math.floor(Math.random() * jokes.length)]);
       }
 });
@@ -408,7 +432,7 @@ client.on('message', msg => {
 });
 
 client.on('message', (msg) => {
-if (msg.content === ')yardım') {
+if (msg.content === 'dergyardım') {
   if (msg.author.bot) return;
   const embed = new Discord.RichEmbed()
 		.setColor(0x954D23)
@@ -429,7 +453,7 @@ if (msg.content === ')yardım') {
 });
 
 client.on('message', msg => {
-  if (msg.content === ')rastgelerenk') {
+  if (msg.content === 'dergrastgelerenk') {
      if (msg.author.bot) return;
       let color = ((1 << 24) * Math.random() | 0).toString(16); //Generates random hex value.
       let embed = new Discord.RichEmbed() //Embeds.
@@ -442,22 +466,14 @@ client.on('message', msg => {
 
 
 client.on('message', function(msg) {
-  if (msg.content === '))yazı tura') {
+  if (msg.content === 'dergyazı tura') {
     if (msg.author.bot) return;
     var array = ["heads", "tails"]
     msg.channel.send(array[Math.floor(Math.random() * array.length)])
   }
 });
 
-client.on('guildMemberAdd', member => {
-  const channel = member.guild.channels.find(ch => ch.name === 'bot-hell');
-  if (!channel) return;
-  const embed = new Discord.RichEmbed()
-  .setColor('#d67286')
-  .addField("Welcome to the server!", `${member}`)
-  .addField("# of members", `${member.guild.memberCount}`)
-  channel.send({embed})
-});
+
 
 client.on('guildMemberAdd', member => {
   const channel = member.guild.channels.find(ch => ch.name === 'spam');
@@ -469,17 +485,10 @@ client.on('guildMemberAdd', member => {
   channel.send({embed})
 });
 
-client.on('disconnected', function(event) {
-   function ResetBot(reset){
-    console.log('bot logged out! resetting')
-  .then(ResetBot => client.destroy())
-    .then(() => client.login(process.env.lmao));
-  }
-});
 
 
 client.on('message', (msg) => {
-if (msg.content === ')botinfo') {
+if (msg.content === 'dergbotinfo') {
   if (msg.author.bot) return;
   let color = ((1 << 24) * Math.random() | 0).toString(16);
   const embed = new Discord.RichEmbed()
@@ -494,109 +503,17 @@ if (msg.content === ')botinfo') {
 	}
 });
 
-
-/*
-const queue = new Map();
-
-client.on('message', async msg => {
-	if (msg.author.bot) return;
-	if (!msg.content.startsWith(prefix)) return;
-
-	const serverQueue = queue.get(msg.guild.id);
-
-	if (msg.content.startsWith(prefix + 'play')) {
-		execute(msg, serverQueue);
-		return;
-	} else if (msg.content.startsWith(prefix + 'skip')) {
-		skip(msg, serverQueue);
-		return;
-	} else if (msg.content.startsWith(prefix + 'stop')) {
-		stop(msg, serverQueue);
-		return;
-	} 
+client.on('message', msg => {
+  
+  if (msg.content.startsWith(config.prefix + 'prefix')) {
+    let newPrefix = msg.content.split(" ").slice(1);
+    if (msg.author.bot) return;
+      newPrefix: config.prefix 
+     fs.writeFile('./config.json', JSON.stringify(config, null, 2), (err) => {
+     	if (err) console.log(err)
+	})
+  }
 });
-
-async function execute(msg, serverQueue) {
-	const args = msg.content.split(' ');
-
-	const voiceChannel = msg.member.voiceChannel;
-	if (!voiceChannel) return msg.channel.send('you might not be in a voice channel');
-	const permissions = voiceChannel.permissionsFor(msg.client.user);
-	if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-		return msg.channel.send('i might need permissions to join the channel and speak');
-	}
-
-	const songInfo = await ytdl.getInfo(args[1]);
-	const song = {
-		title: songInfo.title,
-		url: songInfo.video_url,
-	};
-
-	if (!serverQueue) {
-		const queueContruct = {
-			textChannel: msg.channel,
-			voiceChannel: voiceChannel,
-			connection: null,
-			songs: [],
-			volume: 5,
-			playing: true,
-		};
-
-		queue.set(msg.guild.id, queueContruct);
-
-		queueContruct.songs.push(song);
-
-		try {
-			var connection = await voiceChannel.join();
-			queueContruct.connection = connection;
-			play(msg.guild, queueContruct.songs[0]);
-		} catch (err) {
-			console.log(err);
-			queue.delete(msg.guild.id);
-			return msg.channel.send(err);
-		}
-	} else {
-		serverQueue.songs.push(song);
-		console.log(serverQueue.songs);
-		return msg.channel.send(`${song.title}` + " has been added to queue");
-	}
-
-}
-
-function skip(msg, serverQueue) {
-	if (!msg.member.voiceChannel) return msg.channel.send('you must be in the channel to stop the music');
-	if (!serverQueue) return msg.channel.send('i cant skip any songs because queue is empty');
-	serverQueue.connection.dispatcher.end();
-}
-
-function stop(msg, serverQueue) {
-	if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
-	serverQueue.songs = [];
-	serverQueue.connection.dispatcher.end();
-}
-
-function play(guild, song) {
-	const serverQueue = queue.get(guild.id);
-
-	if (!song) {
-		serverQueue.voiceChannel.leave();
-		queue.delete(guild.id);
-		return;
-	}
-
-	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
-		.on('end', () => {
-			console.log('the Music ended!');
-			serverQueue.songs.shift();
-			play(guild, serverQueue.songs[0]);
-		})
-		.on('error', error => {
-			console.error(error);
-		});
-	dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-}
-*/
-
 
 
 
