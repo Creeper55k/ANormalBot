@@ -52,7 +52,7 @@ client.on('ready', () => {
 
 
 const DBL = require("dblapi.js");
-const dbl = new DBL('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzMDg2OTE3NDYyNTYzMjI1NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNTcxMTgwNzU0fQ.0IMgEATrthROT8NFVdE6c8ROfZHGFE_MjUPnihTolMg', client);
+const dbl = new DBL('', client);
 
 // Optional events
 dbl.on('posted', () => {
