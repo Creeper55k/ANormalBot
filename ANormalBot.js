@@ -506,6 +506,20 @@ client.on('message', msg => {
   }
 });
 
+const { get } = require("snekfetch");
 
+client.on('message', msg => {
+  if(msg.content.startsWith(config.prefix + 'cat')) {
+		try {
+			get('https://aws.random.cat/meow').then(res => {
+				const embed = new Discord.RichEmbed()
+				.setImage(res.body.file)
+				return msg.channel.send({embed});
+			});
+		} catch(err) {
+			return msg.channel.send(err.stack);
+		}
+	}
+});
 
 client.login(process.env.lmao)
