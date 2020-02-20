@@ -102,18 +102,33 @@ if (msg.content === 'derghelp') {
     .addField("dergavatar", "brings up avatar of requested user")
     .addField("dergrandomcolor", "sends random color from hex database")
     .addField("dergheads or tails", "basically coinflip")
-    .addField("@ANormalBot", "bot replies to its mention")
-    .addField("dergcat", "gives a random image of a cat" )
-    .addField("dergeval", "gives owner permission to run scripts outside the program (Bot Owner Only)")
-    .addField("dergsetlanguage", "currently supports turkish, more languages to be added")
-    .addField("derg8ball (question)", "ask any question, and it will give you its best answer")
-    .addField("dergjoke", "gives a random joke, jokes will be added everyday")
-    .addField("dergmorsecode", "converts letters to morsecode or the other way around, morse code alphabet can be found here: https://morsecode.scphillips.com/morse2.html")
-    .addField("dergplay", "plays youtube songs when you give it a link")
-    .addField("dergbinary", "converts binary and alphabet, for the alphabet for binary: https://www.convertbinary.com/alphabet/")
-    .addField("updates (not a command, just shows what i did to the bot)", "binary command added")
-		msg.channel.send({embed})
-	}
+    .addField("dergmeme", "provides you a meme")
+		msg.channel.send({embed: embed}).then(embedMessage => {
+    embedMessage.react('664486384257597491');
+      const filter = (reaction, user) => reaction.emoji.id === '664486384257597491' && user.id === msg.author.id;
+    const collector = embedMessage.createReactionCollector(filter, { max: 1, time: 5 * 60 * 1000 }); // 5 min
+
+    collector.on('collect', () => {
+
+      var embed = new Discord.RichEmbed()
+        .setColor('#007FFF')
+        .setTitle('Commands; part 2')
+        .addField("@ANormalBot", "bot replies to its mention")
+        .addField("dergcat", "disabled due to api error" )
+        .addField("dergeval", "gives owner permission to run scripts outside the program (Bot Owner Only)")
+        .addField("dergsetlanguage", "currently supports turkish, more languages to be added")
+        .addField("derg8ball (question)", "ask any question, and it will give you its best answer")
+        .addField("dergjoke", "gives a random joke, jokes will be added everyday")
+        .addField("dergmorsecode", "converts letters to morsecode or the other way around, morse code alphabet can be found here: https://morsecode.scphillips.com/morse2.html")
+        .addField("dergplay", "plays youtube songs when you give it a link")
+        .addField("dergbinary", "converts binary and alphabet, for the alphabet for binary: https://www.convertbinary.com/alphabet/")
+        .addField("derguserinfo", "brings info of user (beta)")
+        .addField("updates (not a command, just shows what i did to the bot)", "userinfo command added")
+      embedMessage.edit(embed);
+    });
+})
+  .catch(err => console.error(err));
+  }
 });
 
 client.on('message', (msg) => {
@@ -508,6 +523,8 @@ client.on('message', msg => {
 
 const { get } = require("snekfetch");
 
+//command currently disabled to api back-end at max compacity
+/*
 client.on('message', msg => {
   if(msg.content.startsWith(config.prefix + 'cat')) {
 		try {
@@ -519,6 +536,103 @@ client.on('message', msg => {
 		} catch(err) {
 			return msg.channel.send(err.stack);
 		}
+	}
+});
+*/
+
+const got = require('got')
+
+client.on('message', msg => {
+  if (msg.content.startsWith(config.prefix + 'meme')) {
+    if (msg.author.bot) return;
+    const embed = new Discord.RichEmbed();
+    got('https://www.reddit.com/r/memes/random/.json').then(response => {
+        let content = JSON.parse(response.body);
+        let permalink = content[0].data.children[0].data.permalink;
+        let memeUrl = `https://reddit.com${permalink}`;
+        let memeImage = content[0].data.children[0].data.url;
+        let memeTitle = content[0].data.children[0].data.title;
+        let memeUpvotes = content[0].data.children[0].data.ups;
+        let memeDownvotes = content[0].data.children[0].data.downs;
+        let memeNumComments = content[0].data.children[0].data.num_comments;
+        let color = ((1 << 24) * Math.random() | 0).toString(16); 
+        embed.setColor(`$color`)
+        embed.addField(`${memeTitle}`, `[View thread](${memeUrl})`);
+        embed.setImage(memeImage);
+        msg.channel.send(embed)
+            .then(sent => console.log(`Sent a reply to ${sent.author.username}`))
+        console.log('Bot responded with: ' + memeImage);
+    }).catch(console.error);
+  }
+});
+
+client.on('message', msg => {
+    if (msg.content.startsWith(config.prefix + 'userinfo')) {
+       if (msg.author.bot) return;
+      const args = msg.content.split(" ").slice(1);
+      // Remove the "var" line; it isn't necessary.
+      function getUserFromMention(mention) {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
+
+		if (mention.startsWith('!')) {
+			mention = mention.slice(1);
+		}
+
+		return client.users.get(mention);
+	}
+}
+      if (args[0]) {
+		const user = getUserFromMention(args[0]); 
+let inline = true
+let pdresence = true
+const status = {
+online: "<:online:424890369688469504> Online",
+idle: "<:idle:424890472855502849> Idle",
+dnd: "<:dnd:424890429524410368> Do Not Disturb",
+offline: "<:offilne:424890400319340546> Offline/Invisible"
+}
+const h = '9'
+if (msg.author.bot === true) {
+h: "<:bottag:425631858265423883> Yes";
+} else {
+h: "<:user:424958082691629057> No";
+}
+let member = msg.mentions.members.first()
+      let embed = new Discord.RichEmbed()
+.setThumbnail((user.displayAvatarURL))
+let color = ((1 << 24) * Math.random() | 0).toString(16); 
+        embed.setColor(`$color`)
+.addField('Username', `${user.tag}`, inline)
+.addField('id', user.id, inline)
+.addField("Nickname", `${member.nickname !== null ? `${member.nickname}` : "<:no:425632070036094986> None"}`, true)
+.addField('user', `${user}`, inline, true)
+.addField('status', `${[user.presence.status]}`, inline, true)
+.addField('Roles:', member.roles.map(r => `${r}`).join(' | '), true)
+.addField('date of account creation', user.createdAt)
+     msg.channel.send(embed)
+      }
+    }
+});
+
+client.on('message', (msg) => {
+if (msg.content === 'dergbotinfo') {
+  if (msg.author.bot) return;
+  let color = ((1 << 24) * Math.random() | 0).toString(16);
+  var yeet = 0;
+client.guilds.forEach(g => yeet+=g.memberCount)
+  const embed = new Discord.RichEmbed()
+		.setColor(`#${color}`)
+		.setTitle("My Info")
+		.addField("My name", client.user.tag)
+		.addField("My id", client.user.id)
+    .addField("What version am i on?", Discord.version)
+    .addField("the amount of servers i am in", client.guilds.size)
+    .addField("the amount of users i know of for all servers i'm in", yeet)
+    .addField("Memory Usage", Math.round(process.memoryUsage().heapUsed / 1024 / 1024))
+		msg.channel.send({embed})
 	}
 });
 
