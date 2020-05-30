@@ -636,4 +636,26 @@ client.guilds.forEach(g => yeet+=g.memberCount)
 	}
 });
 
+client.on('message', (msg) => {
+if (msg.content === 'dergbeatsaberprofile') {
+  if (msg.author.bot) return;
+  let color = ((1 << 24) * Math.random() | 0).toString(16);
+  const embed = new Discord.RichEmbed()
+		.setColor(`#${color}`)
+		.setTitle("Creeper55k Beatsaber stats")
+		.addField("Levels Played", "2036")
+		.addField("Levels cleared", "750")
+    .addField("Levels failed", "624")
+    .addField("Total played Hours", "4h 50m")
+    .addField("Total Score", "85 094 121")
+    .addField("Hand Distance Traveled", "670km")
+    .addField("Good cuts", "469 390")
+    .addField("Bad cuts", "31 157")
+    .addField("missed notes", "58 245")
+    .addField("full combo", "19")
+    .addField("Average Cut Score", "86")
+		msg.channel.send({embed})
+	}
+});
+
 client.login(process.env.lmao)
