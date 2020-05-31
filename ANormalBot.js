@@ -540,30 +540,13 @@ client.on('message', msg => {
 });
 */
 
-const got = require('got')
+const memes = require('./memes.json');
 
-client.on('message', msg => {
-  if (msg.content.startsWith(config.prefix + 'meme')) {
-    if (msg.author.bot) return;
-    const embed = new Discord.RichEmbed();
-    got('https://www.reddit.com/r/memes/random/.json').then(response => {
-        let content = JSON.parse(response.body);
-        let permalink = content[0].data.children[0].data.permalink;
-        let memeUrl = `https://reddit.com${permalink}`;
-        let memeImage = content[0].data.children[0].data.url;
-        let memeTitle = content[0].data.children[0].data.title;
-        let memeUpvotes = content[0].data.children[0].data.ups;
-        let memeDownvotes = content[0].data.children[0].data.downs;
-        let memeNumComments = content[0].data.children[0].data.num_comments;
-        let color = ((1 << 24) * Math.random() | 0).toString(16); 
-        embed.setColor(`$color`)
-        embed.addField(`${memeTitle}`, `[View thread](${memeUrl})`);
-        embed.setImage(memeImage);
-        msg.channel.send(embed)
-            .then(sent => console.log(`Sent a reply to ${sent.author.username}`))
-        console.log('Bot responded with: ' + memeImage);
-    }).catch(console.error);
-  }
+client.on("message", function(msg) {
+  if (msg.author.bot) return;
+    if (msg.content.startsWith(config.prefix + 'meme')) {
+      msg.channel.send(memes[Math.floor(Math.random() * memes.length)]);
+      }
 });
 
 client.on('message', msg => {
