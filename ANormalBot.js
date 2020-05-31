@@ -521,7 +521,7 @@ client.on('message', msg => {
   }
 });
 
-const { get } = require("snekfetch");
+//const { get } = require("snekfetch");
 
 //command currently disabled to api back-end at max compacity
 /*
