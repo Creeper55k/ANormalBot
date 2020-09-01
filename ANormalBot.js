@@ -642,3 +642,5 @@ if (msg.content === 'dergbeatsaberprofile') {
 });
 
 client.login(process.env.lmao)
+
+//bot is no longer supported
