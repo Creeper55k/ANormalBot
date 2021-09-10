@@ -9,7 +9,6 @@ const client = new Discord.Client({autoReconnect:true});
 
 
 
-
 const ytdl = require('ytdl-core');
 //turns client on and logs into bot
 const fs = require('fs');
@@ -18,28 +17,10 @@ const { inspect } = require('util');
 //grabs required file called config
 const config = require("./config.json");
 
-const guildid = require("./guildid.json")
-
-
-const guildConf = require('./guildConf.json');
 
 const m3u8stream = require('m3u8stream');
 
 const parseTime   = require('m3u8stream/dist/parse-time');
-
-
-
-const http = require('http');
-const express = require('express');
-const app = express();
-app.get("/", (request, response) => {
-  console.log(Date.now() + " Ping Received");
-  response.sendStatus(200);
-});
-app.listen(process.env.PORT);
-setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000);
 
 
 //turns bot on
@@ -51,30 +32,12 @@ client.on('ready', () => {
 
 
 
-const DBL = require("dblapi.js");
-const dbl = new DBL('', client);
-
-// Optional events
-dbl.on('posted', () => {
-  console.log('oliy is fat!');
-})
-
-
-
-dbl.on('error', e => {
- console.log(`Oops! ${e}`);
-})
-
-dbl.on('ready', () => {
-    setInterval(() => {
-        dbl.postStats(client.guilds.size, client.shards.Id, client.shards.total);
-    }, 1800000);
-});
 const activities_list = [
     "with the )help command.",
     "lmao",
     "with coding",
-    ")yardım"
+    ")yardım",
+    "i am back!"
     ]; // creates an arraylist containing phrases you want your bot to switch through.
 
 client.on('ready', () => {
@@ -89,10 +52,11 @@ client.on('ready', () => {
 
 
 
+
 client.on('message', (msg) => {
 if (msg.content === 'derghelp') {
   if (msg.author.bot) return;
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
 		.setColor(0x954D23)
 		.setTitle("Commands:")
 		.addField("derghelp", "shows commands")
@@ -110,7 +74,7 @@ if (msg.content === 'derghelp') {
 
     collector.on('collect', () => {
 
-      var embed = new Discord.RichEmbed()
+      var embed = new Discord.MessageEmbed()
         .setColor('#007FFF')
         .setTitle('Commands; part 2')
         .addField("@ANormalBot", "bot replies to its mention")
@@ -128,6 +92,18 @@ if (msg.content === 'derghelp') {
     });
 })
   .catch(err => console.error(err));
+  }
+});
+
+client.on('message', msg => {
+  
+  if (msg.content.startsWith(config.prefix + 'prefix')) {
+    let newPrefix = msg.content.split(" ").slice(1);
+    if (msg.author.bot) return;
+      newPrefix: config.prefix 
+     fs.writeFile('./config.json', JSON.stringify(config, null, 2), (err) => {
+     	if (err) console.log(err)
+	})
   }
 });
 
@@ -153,7 +129,7 @@ client.on('message', (msg) => {
 client.on('message', (msg) => {
 if (msg.content === 'derginvite') {
   if (msg.author.bot) return;
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
   msg.channel.send({embed: {
     color: 3447003,
     title: "invite me!",
@@ -180,7 +156,7 @@ const clean = text => {
 client.on('message', (msg) => {
   if (msg.author.bot) return;
   if (msg.content.startsWith(config.prefix + 'ping')) {
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
     .setColor(0x954D23)
     .addField("your ping:", `${Date.now() - msg.createdTimestamp}`)
     .addField("Api ping:", `${client.ping}`)
@@ -210,11 +186,9 @@ client.on("message", msg => {
 //if input after eval equals to client.token, replace token with message above
 
       msg.channel.send(clean(evaled), {code:"xl"});
-      msg.react('315009125694177281');
 //if code was evaled successfully send message above
     } catch (err) {
       msg.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
-      msg.react('315009174163685377');
 //if code was not evaled successfully, send error message
     }
   }
@@ -304,7 +278,7 @@ client.on('message', msg => {
 }
       if (args[0]) {
 		const user = getUserFromMention(args[0]); 
-      let embed = new Discord.RichEmbed()
+      let embed = new Discord.MessageEmbed()
       // Replace "message.member" with "message.author"
     .setImage(user.avatarURL)
     .setColor('#275BF0')
@@ -317,7 +291,7 @@ client.on('message', msg => {
   if (msg.content === 'dergrandomcolor') {
      if (msg.author.bot) return;
       let color = ((1 << 24) * Math.random() | 0).toString(16); //Generates random hex value.
-      let embed = new Discord.RichEmbed() //Embeds.
+      let embed = new Discord.MessageEmbed() //Embeds.
             .setTitle(`#${color}`)
             .setColor(`#${color}`);
      msg.channel.send(embed)
@@ -340,13 +314,15 @@ client.on('message', msg => {
 
 
 
-client.on('message', msg => {
+const pingresponse = require("./pingresponse.json");
+
+client.on('message', function(msg) {
   const args = msg.content.split(" ").slice(1);
-  if (msg.isMentioned(client.user)) {
+  if (msg.mentions.has(client.user.id)) {
     if (msg.author.bot) return;
     if(!args.length) {
       msg.react('559091884417482772')
-      msg.channel.send('my prefix is derg, to get my commands to show, do derghelp')
+      msg.channel.send(pingresponse[Math.floor(Math.random() * pingresponse.length)]);
     }
     if (args[0] === 'bad bot') {
       msg.author.send('no u')
@@ -440,7 +416,7 @@ client.on('message', msg => {
 client.on('message', (msg) => {
 if (msg.content === 'dergyardım') {
   if (msg.author.bot) return;
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
 		.setColor(0x954D23)
 		.setTitle("Commands:")
 		.addField(")yardım et", "komutları gösterir")
@@ -462,7 +438,7 @@ client.on('message', msg => {
   if (msg.content === 'dergrastgelerenk') {
      if (msg.author.bot) return;
       let color = ((1 << 24) * Math.random() | 0).toString(16); //Generates random hex value.
-      let embed = new Discord.RichEmbed() //Embeds.
+      let embed = new Discord.MessageEmbed() //Embeds.
             .setTitle(`#${color}`)
             .setColor(`#${color}`);
      msg.channel.send(embed)
@@ -481,15 +457,6 @@ client.on('message', function(msg) {
 
 
 
-client.on('guildMemberAdd', member => {
-  const channel = member.guild.channels.find(ch => ch.name === 'spam');
-  if (!channel) return;
-  const embed = new Discord.RichEmbed()
-  .setColor('#d67286')
-  .addField("Welcome to the server!", `${member}`)
-  .addField("# of members", `${member.guild.memberCount}`)
-  channel.send({embed})
-});
 
 
 
@@ -497,7 +464,7 @@ client.on('message', (msg) => {
 if (msg.content === 'dergbotinfo') {
   if (msg.author.bot) return;
   let color = ((1 << 24) * Math.random() | 0).toString(16);
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
 		.setColor(`#${color}`)
 		.setTitle("My Info")
 		.addField("My name", client.user.tag)
@@ -584,7 +551,7 @@ h: "<:bottag:425631858265423883> Yes";
 h: "<:user:424958082691629057> No";
 }
 let member = msg.mentions.members.first()
-      let embed = new Discord.RichEmbed()
+      let embed = new Discord.MessageEmbed()
 .setThumbnail((user.displayAvatarURL))
 let color = ((1 << 24) * Math.random() | 0).toString(16); 
         embed.setColor(`$color`)
@@ -604,17 +571,13 @@ client.on('message', (msg) => {
 if (msg.content === 'dergbotinfo') {
   if (msg.author.bot) return;
   let color = ((1 << 24) * Math.random() | 0).toString(16);
-  var yeet = 0;
-client.guilds.forEach(g => yeet+=g.memberCount)
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
 		.setColor(`#${color}`)
 		.setTitle("My Info")
 		.addField("My name", client.user.tag)
 		.addField("My id", client.user.id)
     .addField("What version am i on?", Discord.version)
     .addField("the amount of servers i am in", client.guilds.size)
-    .addField("the amount of users i know of for all servers i'm in", yeet)
-    .addField("Memory Usage", Math.round(process.memoryUsage().heapUsed / 1024 / 1024))
 		msg.channel.send({embed})
 	}
 });
@@ -623,7 +586,7 @@ client.on('message', (msg) => {
 if (msg.content === 'dergbeatsaberprofile') {
   if (msg.author.bot) return;
   let color = ((1 << 24) * Math.random() | 0).toString(16);
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
 		.setColor(`#${color}`)
 		.setTitle("Creeper55k Beatsaber stats")
 		.addField("Levels Played", "2036")
@@ -639,8 +602,6 @@ if (msg.content === 'dergbeatsaberprofile') {
     .addField("Average Cut Score", "86")
 		msg.channel.send({embed})
 	}
-});
 
-client.login(process.env.lmao)
 
-//bot is no longer supported
+client.login('')
