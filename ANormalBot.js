@@ -9,7 +9,6 @@ const client = new Discord.Client({autoReconnect:true});
 
 
 
-const ytdl = require('ytdl-core');
 //turns client on and logs into bot
 const fs = require('fs');
 const { inspect } = require('util');
