@@ -9,6 +9,7 @@ const client = new Discord.Client({autoReconnect:true});
 
 
 
+
 //turns client on and logs into bot
 const fs = require('fs');
 const { inspect } = require('util');
@@ -469,7 +470,7 @@ if (msg.content === 'dergbotinfo') {
 		.addField("My name", client.user.tag)
 		.addField("My id", client.user.id)
     .addField("What version am i on?", Discord.version)
-    .addField("the amount of servers i am in", client.guilds.size)
+    .addField("the amount of servers i am in", client.guilds.cache.size)
     .addField("Memory Usage", Math.round(process.memoryUsage().heapUsed / 1024 / 1024))
 		msg.channel.send({embed})
 	}
@@ -576,7 +577,7 @@ if (msg.content === 'dergbotinfo') {
 		.addField("My name", client.user.tag)
 		.addField("My id", client.user.id)
     .addField("What version am i on?", Discord.version)
-    .addField("the amount of servers i am in", client.guilds.size)
+    .addField("the amount of servers i am in", client.guilds.cache.size)
 		msg.channel.send({embed})
 	}
 });
@@ -601,6 +602,6 @@ if (msg.content === 'dergbeatsaberprofile') {
     .addField("Average Cut Score", "86")
 		msg.channel.send({embed})
 	}
-
+});
 
 client.login('')
