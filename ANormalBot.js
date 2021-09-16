@@ -7,9 +7,6 @@ const client = new Discord.Client({autoReconnect:true});
 
 
 
-
-
-
 //turns client on and logs into bot
 const fs = require('fs');
 const { inspect } = require('util');
@@ -22,14 +19,28 @@ const m3u8stream = require('m3u8stream');
 
 const parseTime   = require('m3u8stream/dist/parse-time');
 
+  
+const axios = require("axios");
+
 
 //turns bot on
+
+const http = require('http');
+ const express = require('express');
+ const app = express();
+ app.get("/", (request, response) => {
+   console.log(Date.now() + " Ping Received");
+   response.sendStatus(200);
+ });
+ app.listen(process.env.PORT);
+ setInterval(() => {
+   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+ }, 280000);
 
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
-
 
 
 const activities_list = [
@@ -95,6 +106,7 @@ if (msg.content === 'derghelp') {
   }
 });
 
+
 client.on('message', msg => {
   
   if (msg.content.startsWith(config.prefix + 'prefix')) {
@@ -110,8 +122,9 @@ client.on('message', msg => {
 client.on('message', (msg) => {
   if (msg.content === ')join') {
     if(msg.author.bot) return;
-    const channel = msg.member.voiceChannel;
-    channel.join()
+    const { channel } = msg.member.voice;
+const voiceChannel = msg.member.voice.channel;
+channel.join();
     msg.channel.send('i joined the channel successfully')
   }
 });
@@ -258,6 +271,7 @@ client.on('message', msg => {
   }
 });
 
+/*
 client.on('message', msg => {
     if (msg.content.startsWith(config.prefix + 'avatar')) {
        if (msg.author.bot) return;
@@ -286,7 +300,8 @@ client.on('message', msg => {
       }
     }
 });
-
+*/
+// disabled temporarily 
 client.on('message', msg => {
   if (msg.content === 'dergrandomcolor') {
      if (msg.author.bot) return;
@@ -516,6 +531,7 @@ client.on("message", function(msg) {
       }
 });
 
+/*
 client.on('message', msg => {
     if (msg.content.startsWith(config.prefix + 'userinfo')) {
        if (msg.author.bot) return;
@@ -566,6 +582,8 @@ let color = ((1 << 24) * Math.random() | 0).toString(16);
       }
     }
 });
+*/
+// temporarily disabled, bug issues
 
 client.on('message', (msg) => {
 if (msg.content === 'dergbotinfo') {
@@ -582,6 +600,9 @@ if (msg.content === 'dergbotinfo') {
 	}
 });
 
+
+
+/*
 client.on('message', (msg) => {
 if (msg.content === 'dergbeatsaberprofile') {
   if (msg.author.bot) return;
@@ -603,5 +624,6 @@ if (msg.content === 'dergbeatsaberprofile') {
 		msg.channel.send({embed})
 	}
 });
-
+*/
+// not nessecsary 
 client.login('')
