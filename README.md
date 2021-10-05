@@ -19,3 +19,4 @@ dergavatar doesn't work anymore due to discord.js
 
 dergplay doesn't work also.
 
+derghelp: there are two embeds for a list of commands, one comes after someone reacts. click the "pacman ghost" reaction located under the embed to get the second command list
